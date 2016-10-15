@@ -2,13 +2,19 @@
 
 API backend for fundraising app. Uses a Mongodb backend.
 
+# Configuration
+
+Create app.config.js and set some configuration params:
+
+module.exports = {
+     MONGO_URL: (your mongo url)
+}
+
 # Data Model
 
 These are the collections in Mongo:
 
 ```
-
-scopes: [create,read,update,delete]:users
 
 fund_users: {
     email: "hinerman@gmail.com",
@@ -22,6 +28,8 @@ fund_periods: {
     period_name: "Fall 2016",
     enabled: true
 }
+
+scopes: [create,read,update,delete]:categories
 
 (lookup)
 fund_categories: {
@@ -37,7 +45,7 @@ fund_goals: {
     amount: 100.00
 }
 
-scopes: [create,read,update,delete]:goals
+scopes: [create,read,update,delete]:items
 
 fund_items: {
     user: "hinerman@gmail.com",
@@ -47,6 +55,7 @@ fund_items: {
 }
 ```
 
+# Notes
 
 SPA -> auth0/google -> token -> SPA 
 - spa now has id_token and token
