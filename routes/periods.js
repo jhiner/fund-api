@@ -3,6 +3,14 @@ const router  = express.Router();
 const getDb   = require('../lib/getDb');
 const PERIOD_COLLECTION = require('../lib/constants.js').PERIOD_COLLECTION;
 
+/*
+(lookup)
+fund_periods: {
+    period_name: "Fall 2016",
+    enabled: true
+}
+*/
+
 /* GET periods */
 router.get('/', function(req, res, next) {
       const query = {};
@@ -15,18 +23,18 @@ router.get('/', function(req, res, next) {
 });
 
 /* UPDATE period */
-router.patch('/', function(req, res) {
+router.put('/', function(req, res) {
 
     // TODO: Validate input
-    var periodName = req.body.period;
+    var periodName = req.body.periodName;
     var newPeriodName = req.body.newPeriodName;
 
     const query = {
-        period: periodName
+        periodName: periodName
     }
 
     const newRec = {
-        period: newPeriodName
+        periodName: newPeriodName
     }
 
     // update this period
@@ -42,7 +50,7 @@ router.patch('/', function(req, res) {
 router.delete('/', function(req, res) {
 
     // TODO: Validate input
-    var periodName = req.body.period;
+    var periodName = req.body.periodName;
 
     // delete this period
     getDb(function (db) {
@@ -59,7 +67,7 @@ router.delete('/', function(req, res) {
 router.post('/', function(req, res, next) {
 
     // TODO: validate input
-    var periodName = req.body.period;
+    var periodName = req.body.periodName;
 
     if (!periodName || periodName === '') {
         return res.status(400).json({error: 'period is required'});
@@ -76,10 +84,10 @@ router.post('/', function(req, res, next) {
           if (err && err.code === 11000) {
               winston.debug('period already exists', period);
           } else if (err) {
-              return res.json({error: 'Category already exists'});
+              return res.json({error: 'Period already exists'});
           } else {
             if (err) return res.json({error: err});
-            return res.status(201).json({ message: 'Category added'});
+            return res.status(201).json({ message: 'Period added'});
           }
         });
       });

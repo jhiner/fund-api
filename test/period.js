@@ -8,16 +8,16 @@ const server = require('../app');
 const should = chai.should();
 const expect = chai.expect;
 const getDb  = require('../lib/getDb');
-const CATEGORY_COLLECTION = require('../lib/constants.js').CATEGORY_COLLECTION;
+const PERIOD_COLLECTION = require('../lib/constants.js').PERIOD_COLLECTION;
 
 
 chai.use(chaiHttp);
 
-/* Category tests */
-describe('Categories', () => {
+/* Period tests */
+describe('Periods', () => {
     beforeEach((done) => { //Before each test we empty the database
       getDb(function (db) {
-        db.collection(CATEGORY_COLLECTION).remove({}, function (err) {
+        db.collection(PERIOD_COLLECTION).remove({}, function (err) {
           done();
         });
       });    
@@ -25,10 +25,10 @@ describe('Categories', () => {
  /*
   * Test the /GET route
   */
-  describe('/GET categories', () => {
-      it('it should GET all the categories', (done) => {
+  describe('/GET periods', () => {
+      it('it should GET all the periods', (done) => {
         chai.request(server)
-            .get('/api/categories')
+            .get('/api/periods')
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('array');
@@ -41,35 +41,35 @@ describe('Categories', () => {
  /*
   * Test the /POST route
   */
-  describe('/POST category', () => {
-      it('it should not POST a category without the category field', (done) => {
+  describe('/POST period', () => {
+      it('it should not POST a period without the period field', (done) => {
         const cat = {
             asdf: 'New Cat'
         }
         chai.request(server)
-            .post('/api/categories')
+            .post('/api/periods')
             .send(cat)
             .end((err, res) => {
                 res.should.have.status(400);
                 res.body.should.be.a('object');
-                res.body.should.have.property('error').eql('category is required');
+                res.body.should.have.property('error').eql('period is required');
                 // res.body.error.should.have.property('pages');
                 // res.body.errors.pages.should.have.property('kind').eql('required');
               done();
             });
       });
 
-      it('it should POST a category ', (done) => {
+      it('it should POST a period ', (done) => {
         const cat = {
-            categoryName: 'Testing'
+            periodName: 'Testing'
         }
         chai.request(server)
-            .post('/api/categories')
+            .post('/api/periods')
             .send(cat)
             .end((err, res) => {
                 res.should.have.status(201);
                 res.body.should.be.a('object');
-                res.body.should.have.property('message').eql('Category added');
+                res.body.should.have.property('message').eql('Period added');
                 // res.body.book.should.have.property('title');
                 // res.body.book.should.have.property('author');
                 // res.body.book.should.have.property('pages');
@@ -83,29 +83,29 @@ describe('Categories', () => {
 /*
 Test PUT endpoint
 */
-  describe('/PUT category', () => {
+  describe('/PUT period', () => {
 
-          it('it should UPDATE a category ', (done) => {
+          it('it should UPDATE a period ', (done) => {
 
-        const cat = {
-            categoryName: 'Testing'
+        const record = {
+            periodName: 'Testing'
         }
 
-        const newCat = {
-            categoryName: 'Testing',
-            newCategoryName: 'NewTesting'
+        const newRecord = {
+            periodName: 'Testing',
+            newPeriodName: 'NewTesting'
         }
 
         getDb(function (db) {
-          // create the original category, then update it
-          db.collection(CATEGORY_COLLECTION).insert(cat, function (err) {
+          // create the original period, then update it
+          db.collection(PERIOD_COLLECTION).insert(record, function (err) {
           chai.request(server)
-              .put('/api/categories')
-              .send(newCat)
+              .put('/api/periods')
+              .send(newRecord)
               .end((err, res) => {
                   res.should.have.status(200);
                   res.body.should.be.a('object');
-                  res.body.should.have.property('categoryName').eql(newCat.newCategoryName);
+                  res.body.should.have.property('periodName').eql(newRecord.newPeriodName);
                   done();
               });
           });
@@ -118,21 +118,22 @@ Test PUT endpoint
 /* 
 Test DELETE endpoint
 */
-  describe('/DELETE category', () => {
+  describe('/DELETE period', () => {
 
-      it('it should DELETE a category ', (done) => {
+      it('it should DELETE a period ', (done) => {
 
         const cat = {
-            categoryName: 'Testing123'
+            periodName: 'Testing123'
         }
 
+
         getDb(function (db) {
-          // create the original category, then delete it
-          db.collection(CATEGORY_COLLECTION).insert(cat, function (err) {
+          // create the original period, then delete it
+          db.collection(PERIOD_COLLECTION).insert(cat, function (err) {
           
           // invoke API to delete
           chai.request(server)
-              .delete('/api/categories')
+              .delete('/api/periods')
               .send(cat)
               .end((err, res) => {
                   res.should.have.status(204);
@@ -140,7 +141,7 @@ Test DELETE endpoint
 
                 // check it's not there
                 chai.request(server)
-                    .get('/api/categories')
+                    .get('/api/periods')
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('array');

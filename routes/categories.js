@@ -3,16 +3,17 @@ const router  = express.Router();
 const getDb   = require('../lib/getDb');
 const CATEGORY_COLLECTION = require('../lib/constants.js').CATEGORY_COLLECTION;
 
+/*
+(lookup)
+fund_categories: {
+    category_name: "krispy kreme"
+    enabled: true
+}
+*/
+
 /* GET categories */
 router.get('/', function(req, res, next) {
-    // connections.get = function(clientID, query, callback){
-      // if (typeof query === 'function') {
-      //   callback = query;
-      //   query = {};
-      // }
-
       const query = {};
-      // query.client_id = clientID;
 
       getDb(function (db) {
         db.collection(CATEGORY_COLLECTION).find(query).toArray(function (err, items) {
@@ -22,7 +23,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* UPDATE category */
-router.patch('/', function(req, res) {
+router.put('/', function(req, res) {
 
     // TODO: Validate input
     var categoryName = req.body.categoryName;

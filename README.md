@@ -63,3 +63,12 @@ SPA -> auth0/google -> token -> SPA
 
 
 SPA -> Token -> Create user
+
+
+
+fund.authr.io
+fund.authr.io/api
+
+
+
+
